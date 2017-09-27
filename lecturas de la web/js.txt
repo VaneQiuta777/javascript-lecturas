@@ -1,0 +1,147 @@
+
+En este artículo puedes encontrar varios consejos bastante interesantes a la hora de programar código Javascript.
+Si estas dando tus primeros pasos en Javacript y estas empezando ya a ser sucio y desordenado... No tienes excusa da un giro para escribir el código ordenado y todo será más sencillo.
+
+Los foros estan llenos de peticiones de información sobre Ajax, DOM y como se usan algunas librerías o efectos. Hay una extraordinaria cantidad de información, scripts, librerías que estan siendo desarrollados, blogs y nuevos sitios especializados en esta temática, sólo necesitas un poco de tiempo y echarle un vistazo... es muy fácil los mejores los encuentras en Digg.com o en del.icio.us, se acabaron aquellos días en el que Javascript y el DHTML se convirtieron en persona non grata como habilidad principal en tu CV.
+
+La gran mayoría de código Javascript es hoy en dia mucho más limpio que en la "era" DHTML.
+
+Ahora es un buen momento para convertirte en un entusiasta de Javascript. Aunque algunos defectos que ocurrieron tiempo atras se repiten sin embargo.
+
+Aquí os dejo una series de consejos que os hará más sencillo mantener tu código Javascript ordenado, algunos consejos son demasiado obvios pero todos sabemos que el hombre es el único animal que...
+
+Conserva la sintaxis y estructura de tu código limpia y ordenada
+Esto significa que guardes por ejemplo un límite de longitud de línea (80 caracteres) y que programes funciones razonablemente pequeñas. Un fallo es pensar que en una función larga lo podemos hacer todo.
+
+Tener un tamaño razonable para tus funciones significa que las podrás reutilizar cuando amplies el código, tampoco seas extremista y hagas funciones de una o dos líneas esto puede llegar a ser más confuso que usar una única función.
+
+Este es un ejemplo que muestra cual es la justa medida en cuanto al tamaño de las funciones y la división de las tareas:
+
+function toolLinks(){
+var tools = document.createElement('ul');
+var item = document.createElement('li');
+var itemlink = document.createElement('a');
+itemlink.setAttribute('href', '#');
+itemlink.appendChild(document.createTextNode('close'));
+itemlink.onclick = function(){window.close();}
+item.appendChild(itemlink);
+tools.appendChild(item);
+var item2 = document.createElement('li');
+var itemlink2 = document.createElement('a');
+itemlink2.setAttribute('href', '#');
+itemlink2.appendChild(document.createTextNode('print'));
+itemlink2.onclick = function(){window.print();}
+item2.appendChild(itemlink2);
+tools.appendChild(item2);
+document.body.appendChild(tools);
+}
+Puedes optimizar esta función separando cada tarea con su propia función:
+
+function toolLinks(){
+var tools = document.createElement('ul');
+var item = document.createElement('li');
+var itemlink = createLink('#', 'close', closeWindow);
+item.appendChild(itemlink);
+tools.appendChild(item);
+var item2 = document.createElement('li');
+var itemlink2 = createLink('#', 'print', printWindow);
+item2.appendChild(itemlink2);
+tools.appendChild(item2);
+document.body.appendChild(tools);
+}
+
+function printWindow(){
+window.print();
+}
+
+function closeWindow() {
+window.close();
+}
+
+function createLink(url,text,func){
+var temp = document.createElement('a');
+temp.setAttribute('href', url);
+temp.appendChild(document.createTextNode(text));
+temp.onclick = func;
+return temp;
+}
+Utiliza inteligentemente los nombres de variables y funciones
+Esta es un técnica esencial de programación, utiliza nombres de variables y funciones que sean totalmente descriptivos e incluso otra persona pueda llegar a plantearse que función realizan antes de ver el código.
+
+Recuerda que es correcto el uso de guiones o mayúsculas para concatenar diferentes palabras, en este caso concreto de es más típico el uso de mayúsculas debido a la sintaxis del lenguaje, (ej. getElementsByTagName()).
+
+CambioFormatoFecha();
+cambio_formato_fecha();
+Comenta el código
+Gracias a los comentarios puedes librarte de más de un quebradero de cabeza, es mejor resolver el problema una única vez.
+
+Cómo puedes comprobar en cualquier libro de programación cada línea tiene comentarios explicando su objetivo.
+
+Diferencia las variables dependiendo de su importancia
+Este paso es simple: Coloca aquellas variables que son usadas durante todo el script en la cabecera del código, de esta maneras siempre sabrás donde encontrar estas variables que son las que determinan el resultado de nuestro código.
+
+function toolLinks(){
+var tools, closeWinItem, closeWinLink, printWinItem, printWinLink;
+
+// variables temporales
+var printLinkLabel = ?print?;
+var closeLinkLabel = ?close?;#
+
+tools = document.createElement(?ul?);
+closeWinItem = document.createElement(?li?);
+closeWinLink = createLink(?#', closeLinkLabel, closeWindow);
+closeWinItem.appendChild(closeWinLink);
+tools.appendChild(closeWinItem);
+printWinItem = document.createElement(?li?);
+printWinLink = createLink(?#', printLinkLabel, printWindow);
+printWinItem.appendChild(printWinLink);
+tools.appendChild(printWinItem);
+document.body.appendChild(tools);
+}
+Separa el texto del código
+Puedes separar el texto del código, utilizando un documento llamado texto.js en formato JSON.
+
+Un ejemplo que funciona muy bien podría ser:
+
+var locales = {
+'en': {
+'homePageAnswerLink':'Answer a question now',
+'homePageQuestionLink':'Ask a question now',
+'contactHoverMessage':'Click to send this info as a message',
+'loadingMessage' : 'Loading your data...',
+'noQAmessage' : 'You have no Questions or Answers yet',
+'questionsDefault': 'You have not asked any questions yet',
+'answersDefault': 'You have not answered any questions yet.',
+'questionHeading' : 'My Questions',
+'answersHeading' : 'My Answers',
+'seeAllAnswers' : 'See all your Answers',
+'seeAllQuestions' : 'See all your Questions',
+'refresh': 'refresh'
+},
+'es': {
+'homePageAnswerLink':'Responde una pregunta',
+'homePageQuestionLink':'Haz una pregunta',
+'contactHove' : 'Cargando datos...',
+'noQAmessage' : 'No quedan preguntas',
+'questionsDefault': 'Quedan preguntas por responder',
+'answersDefault': 'No quedan preguntas pendientes',
+'questionHeading' : 'Mis preguntas',
+'answersHeading' : 'Mis respuestas',
+'seeAllAnswers' : 'Ver todas las respuestas',
+'seeAllQuestions' : 'Ver todas las preguntas',
+'refresh': 'Refrescar'
+},
+'fr': {
+}
+'de': {
+}
+};
+Esto permitiría a cualquiera que no es programador traducir el texto del script, cambiando unicamente las etiquetas sin necesidad de acceder al código.
+
+Documenta el código
+Escribe una buena documentacion de tu script / librería o efecto. Una buena documentación da calidad al código, sino preguntate porque existe la clásica documentación en cualquier API con todas las posibles propiedades y parametros, pero sin duda lo mejor de todo es explicar con ejemplos que contienen una lista de posibilidades.
+
+
+ 
+Autor
+Manu Gutierrez 
